@@ -82,6 +82,7 @@ export async function getuserInfo ( uid){
 }
 
 export async function insertNewLink (link){
+  console.log("El link que llega a firebase INSERTnewLin es :" , link);
    try{
       const docRef = collection(db , "links");
       const res = await addDoc(docRef , link);
@@ -92,29 +93,33 @@ export async function insertNewLink (link){
    }
    }
 
-   export async function getLinks(uid){
-    console.log("ELL UID EN GE LINK ES " , uid)
-    const links =[];
-
-    try{
-        const collectionRef = collection(db , "links"); 
-        const q = query(collectionRef , where('uid ' , '==' , uid))
-        console.log("LA Q ES " , q);
-      const querySnapshot = await getDocs(q);
-        console.log("LA Q uerySnapootES " , querySnapshot);
-
-      querySnapshot.forEach(doc => {
-        console.log("POR EL FOR EACH ");
-        const link = {...doc.data()};
-        link.docId = doc.id; 
-        console.log("LOS  LINK EN QUERYSNAPOT SON " , link);
-        links.push(link);
-      })
-      console.log("ELL UID EN GE LIN  LINKK" , links)
-        return links;
-      }catch(error){
-        console.error(error);
+   export async function getLinks(uid) {
+    if (typeof uid !== 'string' && typeof uid !== 'number') {
+      throw new Error('El UID debe ser una cadena o un número.');
     }
-   }
+  
+    // Convierte el UID a una cadena si es un número
+    const uidString = typeof uid === 'number' ? uid.toString() : uid;
+  
+    const links = [];
+  
+    try {
+      const collectionRef = collection(db, "links");
+      const q = query(collectionRef, where('uid', '==', uidString));
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach(doc => {
+        const linkData = doc.data();
+        const link = { docId: doc.id, ...linkData };
+        links.push(link);
+      });
+  
+      return links;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  
 
 

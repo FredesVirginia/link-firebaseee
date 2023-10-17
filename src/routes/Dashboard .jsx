@@ -21,7 +21,7 @@ export default function Dashboard () {
         setCurrentUser(user);
         setState(2);
         const resLinks = await getLinks(user.uid);
-        console.log("LOS LINK SON " , resLinks);
+        console.log("LOS LINK SON en el Dashboard " , resLinks);
       setLinks(resLinks);
       }
 
@@ -39,11 +39,11 @@ export default function Dashboard () {
       <div>
       <h1>Este es el dashboard</h1>
       <AuthProvider
-    onUserLoggendIn={handleUserLoggendIn}
-    onUserNotRegistered={handleUserNotRegistered}
-    onUserNotLoggendIm={handleUserNotLoggendIn}
-    >
-      Loading.....
+          onUserLoggendIn={handleUserLoggendIn}
+          onUserNotRegistered={handleUserNotRegistered}
+          onUserNotLoggendIm={handleUserNotLoggendIn}
+          >
+             Loading.....
     </AuthProvider>
     </div>
     }
@@ -68,6 +68,8 @@ export default function Dashboard () {
            console.log("1")
           const res = await insertNewLink(newLink);
           console.log("2")
+          console.log("El new Link en el Dasboard es " , newLink)
+          console.log("El res en el dasboard es =" , res);
           newLink.docId = res.id;
            console.log("3")
           setTitle("");
