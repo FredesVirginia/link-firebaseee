@@ -120,6 +120,18 @@ export async function insertNewLink (link){
       throw error;
     }
   }
+
+  export async function updateLink (docId , link){
+    try{
+      //aqui como solo voy a buscar un unico documento
+      //utilo la funcion doc()
+      const docRef = doc(db ,"links" , docId );
+      const res = await setDoc(docRef , link);
+      return res;
+    }catch(error){
+        console.error(error);
+    }
+  }
   
 
 

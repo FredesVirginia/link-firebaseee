@@ -3,8 +3,8 @@ import AuthProvider from '../components/AuthProvider';
 import {Link, useNavigate} from "react-router-dom";
 import DashboardWraper from '../components/DashboardWraper';
 import {v4 as uuidv4} from "uuid";
-import {insertNewLink , getLinks} from "../firebase/firebase";
-
+import {insertNewLink , getLinks, updateLink} from "../firebase/firebase";
+import Links from '../components/Links';
 
 export default function Dashboard () {
   const navigate = useNavigate();
@@ -112,6 +112,18 @@ export default function Dashboard () {
         </AuthProvider>
       )
     }
+
+    async function handleDeleteLink(docId , title , url){
+
+    }
+
+    async function handleUpdateLink (docId , title , url) {
+        const link = links.find(item => item.docId === docId)
+        link.title = title ;
+        link.url = url;
+        await updateLink(docId , link);
+    
+      }
   return (
      <DashboardWraper>
       <div>
@@ -127,9 +139,15 @@ export default function Dashboard () {
         </form>
         <div >
           {links.map((link) =>(
-            <div key={link.id}>
-              <a href={link.url}> {link.title}</a>
-            </div>
+            <Links 
+                key={link.docId}
+                docId= {link.docId}
+                url={link.url}
+                title={link.title}
+                onDelete={handleDeleteLink}
+                onUpdate={handleUpdateLink}
+            />
+            
           ))}
         </div>
 
