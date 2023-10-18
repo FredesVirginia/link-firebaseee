@@ -28,7 +28,7 @@ export default function AuthProvider({children , onUserLoggendIn , onUserNotLogg
           if(isRegistered){
             const userInfo = await getuserInfo(user.uid);
             if(userInfo.processCompleted){
-              console.log("Falta username");
+             
               onUserLoggendIn(userInfo);
             }else {
               console.log("Usuario logueado completo");
@@ -58,3 +58,5 @@ export default function AuthProvider({children , onUserLoggendIn , onUserNotLogg
     </div>
   )
 }
+
+///wedew

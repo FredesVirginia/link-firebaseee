@@ -64,6 +64,12 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
         setCurrentUrl(e.target.value);
  
      }
+
+
+     //edewdew
+    async function handleDelete (){
+        onDelete(docId)
+    }
     
     return (
         <div key={docId}>
@@ -121,7 +127,7 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
             </div>
 
             <div>
-                <button>Delete</button>
+                <button onClick={handleDelete}>Delete</button>
             </div>
         </div>
     );

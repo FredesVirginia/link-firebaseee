@@ -33,7 +33,7 @@ export const storage = getStorage(app);
 export async function userExists(uid){
     const docRef = doc(db , "users" , uid);
     const res = await getDoc(docRef);
-    console.log(res);
+   
     return res.exists();
 }
 
@@ -131,6 +131,49 @@ export async function insertNewLink (link){
     }catch(error){
         console.error(error);
     }
+  }
+
+
+
+  //con esta funcion decodificamos el archivo para subirlo
+  //a firebase, en bytes
+  export async function setUserProfile(uid , file){
+    //aqui la parte de images, seria el nombre del carpeta
+    //donde se va a guardar el file
+      try{
+        const imageRef = ref(storage , `images/${uid}`);
+        const resUpload = await uploadBytes(imageRef , file);
+        return resUpload;
+      }catch(error){
+        console.error(error);
+      }
+  }
+//qwswqdqw
+
+  // y con esta funcion descargamso la imagen de firebase
+  // para que aparesca en nuestra intefaz
+
+  export async function  getProfilePhotoUrl(profilePicture){
+    try{
+      const imageRef = ref(storage , profilePicture );
+      const url = await getDownloadURL(imageRef);
+      return url ; 
+    }catch(error){
+      console.error(error);
+    }
+  }
+
+
+  export async function deleteLink(docId){
+    try{
+        const docRef = doc(db , "links" , docId);
+        const res = await deleteDoc(docRef);
+        return res;
+
+    }catch(error){
+      console.log(error);
+    }
+
   }
   
 

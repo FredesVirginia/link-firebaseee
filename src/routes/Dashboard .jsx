@@ -3,11 +3,12 @@ import AuthProvider from '../components/AuthProvider';
 import {Link, useNavigate} from "react-router-dom";
 import DashboardWraper from '../components/DashboardWraper';
 import {v4 as uuidv4} from "uuid";
-import {insertNewLink , getLinks, updateLink} from "../firebase/firebase";
+import {insertNewLink , getLinks, updateLink, deleteLink} from "../firebase/firebase";
 import Links from '../components/Links';
 
 export default function Dashboard () {
   const navigate = useNavigate();
+  ///
   const [state , setState] = React.useState(0);
   const [currentUser , setCurrentUser] = React.useState({});
   const [username , setUsername] = React.useState("");
@@ -113,8 +114,10 @@ export default function Dashboard () {
       )
     }
 
-    async function handleDeleteLink(docId , title , url){
-
+    async function handleDeleteLink(docId ){
+      await deleteLink(docId);
+      const temp = links.filter((link) => link.docId !== docId);
+      setLinks([...temp]);
     }
 
     async function handleUpdateLink (docId , title , url) {
