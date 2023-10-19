@@ -1,3 +1,4 @@
+
 import React , {useEffect , useState} from 'react'
 import {GoogleAuthProvider , onAuthStateChanged, signInWithPopup} from "firebase/auth";
 import {auth  , userExists , getuserInfo,  registerNewUser} from "../firebase/firebase";
@@ -28,7 +29,7 @@ export default function AuthProvider({children , onUserLoggendIn , onUserNotLogg
           if(isRegistered){
             const userInfo = await getuserInfo(user.uid);
             if(userInfo.processCompleted){
-              console.log("Falta username");
+             
               onUserLoggendIn(userInfo);
             }else {
               console.log("Usuario logueado completo");

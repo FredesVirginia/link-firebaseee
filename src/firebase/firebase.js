@@ -33,7 +33,7 @@ export const storage = getStorage(app);
 export async function userExists(uid){
     const docRef = doc(db , "users" , uid);
     const res = await getDoc(docRef);
-    console.log(res);
+   
     return res.exists();
 }
 
@@ -82,6 +82,7 @@ export async function getuserInfo ( uid){
 }
 
 export async function insertNewLink (link){
+  console.log("El link que llega a firebase INSERTnewLin es :" , link);
    try{
       const docRef = collection(db , "links");
       const res = await addDoc(docRef , link);
@@ -92,29 +93,101 @@ export async function insertNewLink (link){
    }
    }
 
-   export async function getLinks(uid){
-    console.log("ELL UID EN GE LINK ES " , uid)
-    const links =[];
-
-    try{
-        const collectionRef = collection(db , "links"); 
-        const q = query(collectionRef , where('uid ' , '==' , uid))
-        console.log("LA Q ES " , q);
+   export async function getLinks(uid) {
+    if (typeof uid !== 'string' && typeof uid !== 'number') {
+      throw new Error('El UID debe ser una cadena o un número.');
+    }
+  
+    // Convierte el UID a una cadena si es un número
+    const uidString = typeof uid === 'number' ? uid.toString() : uid;
+  
+    const links = [];
+  
+    try {
+      const collectionRef = collection(db, "links");
+      const q = query(collectionRef, where('uid', '==', uidString));
       const querySnapshot = await getDocs(q);
-        console.log("LA Q uerySnapootES " , querySnapshot);
-
+  
       querySnapshot.forEach(doc => {
-        console.log("POR EL FOR EACH ");
-        const link = {...doc.data()};
-        link.docId = doc.id; 
-        console.log("LOS  LINK EN QUERYSNAPOT SON " , link);
+        const linkData = doc.data();
+        const link = { docId: doc.id, ...linkData };
         links.push(link);
-      })
-      console.log("ELL UID EN GE LIN  LINKK" , links)
-        return links;
-      }catch(error){
+      });
+  
+      return links;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  export async function updateLink (docId , link){
+    try{
+      //aqui como solo voy a buscar un unico documento
+      //utilo la funcion doc()
+      const docRef = doc(db ,"links" , docId );
+      const res = await setDoc(docRef , link);
+      return res;
+    }catch(error){
         console.error(error);
     }
-   }
+  }
+
+
+
+  //con esta funcion decodificamos el archivo para subirlo
+  //a firebase, en bytes
+  export async function setUserProfile(uid , file){
+    //aqui la parte de images, seria el nombre del carpeta
+    //donde se va a guardar el file
+      try{
+        const imageRef = ref(storage , `images/${uid}`);
+        const resUpload = await uploadBytes(imageRef , file);
+        return resUpload;
+      }catch(error){
+        console.error(error);
+      }
+  }
+//qwswqdqw
+
+  // y con esta funcion descargamso la imagen de firebase
+  // para que aparesca en nuestra intefaz
+
+  export async function  getProfilePhotoUrl(profilePicture){
+    try{
+      const imageRef = ref(storage , profilePicture);
+      const url = await getDownloadURL(imageRef);
+      return url ; 
+    }catch(error){
+      console.error(error);
+    }
+  }
+
+  
+
+
+  export async function deleteLink(docId){
+    try{
+        const docRef = doc(db , "links" , docId);
+        const res = await deleteDoc(docRef);
+        return res;
+
+    }catch(error){
+      console.log(error);
+    }
+
+  }
+  
+
+  export async function getUserPublicProfileInfo (uid){
+      const profileInfo = await getuserInfo(uid);
+      const linksInfo = await getLinks(uid);
+        return {
+          profileInfo :profileInfo,
+          linksInfo : linksInfo,
+        }
+  }
+
+
 
 

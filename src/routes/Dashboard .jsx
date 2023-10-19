@@ -3,11 +3,12 @@ import AuthProvider from '../components/AuthProvider';
 import {Link, useNavigate} from "react-router-dom";
 import DashboardWraper from '../components/DashboardWraper';
 import {v4 as uuidv4} from "uuid";
-import {insertNewLink , getLinks} from "../firebase/firebase";
-
+import {insertNewLink , getLinks, updateLink, deleteLink} from "../firebase/firebase";
+import Links from '../components/Links';
 
 export default function Dashboard () {
   const navigate = useNavigate();
+  ///
   const [state , setState] = React.useState(0);
   const [currentUser , setCurrentUser] = React.useState({});
   const [username , setUsername] = React.useState("");
@@ -21,7 +22,7 @@ export default function Dashboard () {
         setCurrentUser(user);
         setState(2);
         const resLinks = await getLinks(user.uid);
-        console.log("LOS LINK SON " , resLinks);
+        console.log("LOS LINK SON en el Dashboard " , resLinks);
       setLinks(resLinks);
       }
 
@@ -39,11 +40,11 @@ export default function Dashboard () {
       <div>
       <h1>Este es el dashboard</h1>
       <AuthProvider
-    onUserLoggendIn={handleUserLoggendIn}
-    onUserNotRegistered={handleUserNotRegistered}
-    onUserNotLoggendIm={handleUserNotLoggendIn}
-    >
-      Loading.....
+          onUserLoggendIn={handleUserLoggendIn}
+          onUserNotRegistered={handleUserNotRegistered}
+          onUserNotLoggendIm={handleUserNotLoggendIn}
+          >
+             Loading.....
     </AuthProvider>
     </div>
     }
@@ -68,6 +69,8 @@ export default function Dashboard () {
            console.log("1")
           const res = await insertNewLink(newLink);
           console.log("2")
+          console.log("El new Link en el Dasboard es " , newLink)
+          console.log("El res en el dasboard es =" , res);
           newLink.docId = res.id;
            console.log("3")
           setTitle("");
@@ -110,6 +113,20 @@ export default function Dashboard () {
         </AuthProvider>
       )
     }
+
+    async function handleDeleteLink(docId ){
+      await deleteLink(docId);
+      const temp = links.filter((link) => link.docId !== docId);
+      setLinks([...temp]);
+    }
+
+    async function handleUpdateLink (docId , title , url) {
+        const link = links.find(item => item.docId === docId)
+        link.title = title ;
+        link.url = url;
+        await updateLink(docId , link);
+    
+      }
   return (
      <DashboardWraper>
       <div>
@@ -125,9 +142,15 @@ export default function Dashboard () {
         </form>
         <div >
           {links.map((link) =>(
-            <div key={link.id}>
-              <a href={link.url}> {link.title}</a>
-            </div>
+            <Links 
+                key={link.docId}
+                docId= {link.docId}
+                url={link.url}
+                title={link.title}
+                onDelete={handleDeleteLink}
+                onUpdate={handleUpdateLink}
+            />
+            
           ))}
         </div>
 
