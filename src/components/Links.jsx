@@ -1,5 +1,5 @@
 import React , {useState , useRef , useEffect} from "react"
-
+import styles from "./link.module.css";
 export default function Links({ docId, title, url, onDelete, onUpdate }) {
     //Estados Locales
 
@@ -72,9 +72,9 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
     }
     
     return (
-        <div key={docId}>
-            <div>
-            <div>
+        <div key={docId} className={styles.link} >
+            <div className={styles.linkInfo} >
+            <div className={styles.linkTitle}>
                {editTitle ? (
                 <> <input
                         value={currentTitle} 
@@ -94,13 +94,13 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
                        
                         ) : (
                 <>
-                 <button onClick={handleEditTitle}>Edit</button>
+                 <button className={styles.btnEdit} onClick={handleEditTitle}>✏️ </button>
                 {currentTitle}
                 </>
                )}
 
             </div>
-            <div>
+            <div  className={styles.linkUrl}>
             {editUrl ? (
                 <> <input 
                         value={currentTitle}
@@ -118,7 +118,7 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
                         /></>
                ) : (
                 <>
-                 <button onClick={handleEditUrl}>Edit</button>
+                 <button  className={styles.btnEdit}  onClick={handleEditUrl}>✏️ </button>
                 {currenteUrl}
                 </>
                )}
@@ -126,8 +126,8 @@ export default function Links({ docId, title, url, onDelete, onUpdate }) {
             </div>
             </div>
 
-            <div>
-                <button onClick={handleDelete}>Delete</button>
+            <div className={styles.linkActios}>
+                <button className={styles.btnDelete} onClick={handleDelete}>🗑</button>
             </div>
         </div>
     );

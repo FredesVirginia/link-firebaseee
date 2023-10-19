@@ -5,6 +5,8 @@ import DashboardWraper from '../components/DashboardWraper';
 import {v4 as uuidv4} from "uuid";
 import {insertNewLink , getLinks, updateLink, deleteLink} from "../firebase/firebase";
 import Links from '../components/Links';
+import styles from "./dashboard.module.css";
+
 
 export default function Dashboard () {
   const navigate = useNavigate();
@@ -131,18 +133,20 @@ export default function Dashboard () {
      <DashboardWraper>
       <div>
         <h1> Dashboard</h1>
-        <h2> El user  es : </h2>
-        <form action ="" onSubmit = {handleOnSubmit}>
+        
+        <form className={styles.entryContainer} action ="" onSubmit = {handleOnSubmit}>
           <label htmlFor="title" >Title</label>
-          <input onChange={handleOnChange} type="text " name="title"/>
+          <input className='input' onChange={handleOnChange} type="text " name="title"/>
        
           <label htmlFor="url" >url</label>
-          <input onChange={handleOnChange} type="text " name="url"/>
-          <input type= "submit" value= "Crea tu nuevo Link" />
+          <input className='input' onChange={handleOnChange} type="text " name="url"/>
+          <input className='btn' type= "submit" value= "Crea tu nuevo Link" />
         </form>
         <div >
           {links.map((link) =>(
-            <Links 
+             <div className={styles.linksContainer}>
+
+<Links 
                 key={link.docId}
                 docId= {link.docId}
                 url={link.url}
@@ -150,6 +154,7 @@ export default function Dashboard () {
                 onDelete={handleDeleteLink}
                 onUpdate={handleUpdateLink}
             />
+             </div>
             
           ))}
         </div>

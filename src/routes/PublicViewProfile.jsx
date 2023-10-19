@@ -1,18 +1,34 @@
 import React , {useState , useEffect}from 'react'
 import {useParams} from "react-router-dom";
-import { existsUsername  , getUserPublicProfileInfo} from '../firebase/firebase';
+import { existsUsername  , getProfilePhotoUrl, getUserPublicProfileInfo} from '../firebase/firebase';
+import PublicLinks from '../components/PublicLinks';
+import DashboardWraper from '../components/DashboardWraper';
+import styles from "./profilePublic.module.css"
+
 export default function PublicViewProfile() {
   const params = useParams();
-  const [profile , setProfile] = useState(null);
+  const [profile , setProfile] = useState("");
+  const [url , setUrl] = useState("");
+  //el estado 7 quiere decir que no existe
+  const [state , setState] = useState(0);
 
   useEffect( ()=>{
     getProfile();
      async function getProfile(){
       const username = params.username;
     try{
-      const userExists = await existsUsername(username);
-      if(userExists){
-        const userInfo = await getUserPublicProfileInfo(userExists);
+      const userUid = await existsUsername(username);
+      console.log("El username en public profile es " , userUid);
+      if(userUid){
+       console.log("PASO EL INFO");
+        const userInfo = await getUserPublicProfileInfo(userUid);
+        console.log("El user Info encontrado es " , userInfo);
+          setProfile(userInfo);
+         
+          const url = await getProfilePhotoUrl(userInfo.profileInfo.profilePicture);
+          setUrl(url);
+      }else{
+        setState(7);
       }
     
     }catch(error){
@@ -20,14 +36,36 @@ export default function PublicViewProfile() {
     }
      }
   } , [params]);
-  return (
-    <div>
-      <div>
-        <img />
-      </div>
-      <h2>Username</h2>
-      <h3>Display Name</h3>
-      <div>Links</div>
-    </div>
-  )
+
+
+  if(state === 7){
+    return (
+      <div><h1>Username doesn"t existe</h1></div>
+    )
+  }else{
+
+    if(profile && url){
+      return <div className={styles.profileContainer}>
+          <div className={styles.profilePicture}>
+          <img src={url} width={200} alt=""/>
+          </div>
+        <h2>{profile.profileInfo.username}</h2>
+        <h3>{profile.profileInfo.displayName}</h3>
+        <h2>Links</h2>
+        <div className={styles.publicLinksContainer}>
+          {profile?.linksInfo.map((link) =>(
+            <PublicLinks key={link.docId} url={link.url} title={link.title} />
+          ))}
+        </div>
+         </div>
+     
+    }else{
+      return <h2>Cargando..</h2>
+      
+    }
+  }
+
+  
+
+  
 }

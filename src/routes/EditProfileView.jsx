@@ -1,5 +1,5 @@
 import React , {useState , useRef } from 'react';
-
+import styles from "./editProfile.module.css";
 import DashboardWraper from '../components/DashboardWraper'
 import AuthProvider from '../components/AuthProvider'
 import { useNavigate } from 'react-router-dom';
@@ -58,10 +58,9 @@ export default function EditProfileView() {
                 tempUser.profilePicture = res.metadata.fullPath;
                 await updaterUser(tempUser);
                 setCurrentUser({...tempUser});
-<<<<<<< HEAD
+
                 console.log("La picture en currente file es " , currentUser.profilePicture)
-=======
->>>>>>> b462b585afdb5a53751f01c8566601b0c3ecd556
+
                 const url = await getProfilePhotoUrl(currentUser.profilePicture);
                 setProfileUrl(url);
               }
@@ -83,12 +82,13 @@ export default function EditProfileView() {
         <h1>EditProfileView</h1>
         <div>
           <h2>Edit Profile Info</h2>
-          <div>
+          <div className={styles.profilePictureContainer}>
             <div>
               <img src={profileUrl} alt="" width={100}/>
             </div>
             <div>
               <button
+              className='btn'
                onClick={handleOpenFilePicker}
               >
                 Choose new Profile Picture
@@ -96,6 +96,7 @@ export default function EditProfileView() {
               </button>
              
               <input 
+              className={styles.fileInput}
               type="file" 
               ref={fileRef}
               style={{display : "none"}}

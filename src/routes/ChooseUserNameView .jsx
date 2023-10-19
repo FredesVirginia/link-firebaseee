@@ -2,6 +2,8 @@ import React from 'react'
 import {Link, useNavigate} from "react-router-dom";
 import AuthProvider from '../components/AuthProvider';
 import { existsUsername , updaterUser } from '../firebase/firebase';
+import styles from "./choose.module.css";
+
 
 export default function ChooseUserNameView () {
   const navigate = useNavigate();
@@ -47,15 +49,15 @@ function handleUserNotRegistered (user){
 
  if( state=== 3 || state === 5 ){
     return (
-      <div>
-        Bienvenido {currentUser.dsplayName};
+      <div className={styles.chooseUserContainer}>
+        <h1>Bienvenido {currentUser.displayName}</h1>
         <p>Para Terminar el proceso elige un nombre de Usuario </p>
-        {state === 5 ?( <p>El nombre ya existe, elige otro </p> ) : (<p>El ESTADO NO ES 5</p>)}
+        {state === 5 ?( <p>El nombre ya existe, elige otro </p> ) : (<p></p>)}
         <div>
-          <input type="text" onChange={handleInputUserName} />
+          <input className='input' type="text" onChange={handleInputUserName} />
         </div>
         <div>
-          <button onClick={handleContinue}>Continuar</button>
+          <button className='btn' onClick={handleContinue}>Continuar</button>
         </div>
      
       </div>
@@ -64,9 +66,9 @@ function handleUserNotRegistered (user){
 
 
     if(state === 6){
-      return <div>
+      return <div className={styles.chooseUserContainer}>
         <h1>Felcidades !1 Y puedes ir al Dashboard a Crear tus Links</h1>
-        <Link to ="/dashboard"> Continuar</Link>
+        <Link  className="a" to ="/dashboard"> Continuar</Link>
   
       </div>
     }
