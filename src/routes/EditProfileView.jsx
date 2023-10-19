@@ -58,7 +58,10 @@ export default function EditProfileView() {
                 tempUser.profilePicture = res.metadata.fullPath;
                 await updaterUser(tempUser);
                 setCurrentUser({...tempUser});
+<<<<<<< HEAD
                 console.log("La picture en currente file es " , currentUser.profilePicture)
+=======
+>>>>>>> b462b585afdb5a53751f01c8566601b0c3ecd556
                 const url = await getProfilePhotoUrl(currentUser.profilePicture);
                 setProfileUrl(url);
               }

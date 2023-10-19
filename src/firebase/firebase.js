@@ -155,7 +155,11 @@ export async function insertNewLink (link){
 
   export async function  getProfilePhotoUrl(profilePicture){
     try{
+<<<<<<< HEAD
       const imageRef = ref(storage , profilePicture);
+=======
+      const imageRef = ref(storage , profilePicture );
+>>>>>>> b462b585afdb5a53751f01c8566601b0c3ecd556
       const url = await getDownloadURL(imageRef);
       return url ; 
     }catch(error){
@@ -163,8 +167,11 @@ export async function insertNewLink (link){
     }
   }
 
+<<<<<<< HEAD
   
 
+=======
+>>>>>>> b462b585afdb5a53751f01c8566601b0c3ecd556
 
   export async function deleteLink(docId){
     try{
@@ -178,6 +185,7 @@ export async function insertNewLink (link){
 
   }
   
+<<<<<<< HEAD
 
   export async function getUserPublicProfileInfo (uid){
       const profileInfo = await getuserInfo(uid);
@@ -189,5 +197,7 @@ export async function insertNewLink (link){
   }
 
 
+=======
+>>>>>>> b462b585afdb5a53751f01c8566601b0c3ecd556
 
 
